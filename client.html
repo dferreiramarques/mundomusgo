@@ -16,7 +16,7 @@
 
 /* LAYER 0 — Reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { height: 100%; }
+html { height: 100%; font-size: 125%; }
 body {
   font-family: var(--font-body);
   background: var(--bg-screen);
@@ -28,33 +28,33 @@ body {
 button { cursor: pointer; font-family: var(--font-body); }
 textarea, input { font-family: var(--font-body); }
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-abyss); }
-::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 3px; }
+::-webkit-scrollbar-track { background: var(--bg-screen); }
+::-webkit-scrollbar-thumb { background: var(--bg-border); border-radius: 3px; border: 1px solid var(--bg-screen); }
 
 /* LAYER 1 — Tokens : Mundo Musgo */
 :root {
-  --bg-abyss:   #020602;
-  --bg-screen:  #060d06;
-  --bg-panel:   #0a160a;
-  --bg-raised:  #112211;
-  --bg-border:  #1a3a1a;
+  --bg-abyss:   #c8eae3;
+  --bg-screen:  #d8f0ea;
+  --bg-panel:   #e4f6f2;
+  --bg-raised:  #f0faf8;
+  --bg-border:  #9dcec5;
 
-  --text-primary:   #d4f0d4;
-  --text-secondary: #6a9a6a;
-  --text-inverse:   #020602;
+  --text-primary:   #0a3328;
+  --text-secondary: #2a6e5a;
+  --text-inverse:   #f0faf8;
 
-  --accent:   #5aff6e;
-  --confirm:  #4ade80;
-  --warning:  #d4a843;
-  --danger:   #f87171;
-  --gm-color: #5aff6e;
+  --accent:   #0d6e52;
+  --confirm:  #1a9e6f;
+  --warning:  #8a5c00;
+  --danger:   #b52a2a;
+  --gm-color: #0d6e52;
 
-  --player-0: #5aff6e;
-  --player-1: #60a5fa;
-  --player-2: #f59e0b;
-  --player-3: #f87171;
-  --player-4: #c084fc;
-  --player-5: #a78bfa;
+  --player-0: #0d6e52;
+  --player-1: #1a5fa8;
+  --player-2: #8a5c00;
+  --player-3: #b52a2a;
+  --player-4: #6b35a8;
+  --player-5: #2a6e8a;
 
   --font-display: 'Cinzel Decorative', serif;
   --font-body:    'IM Fell English', Georgia, serif;
@@ -73,7 +73,7 @@ textarea, input { font-family: var(--font-body); }
 
   --radius-sm: 5px; --radius-md: 9px; --radius-lg: 14px;
   --shadow-md: 0 4px 12px rgba(0,0,0,.7);
-  --shadow-accent: 0 0 18px rgba(90,255,110,.25);
+  --shadow-accent: 0 0 18px rgba(13,110,82,.25);
 
   --dur-fast: 120ms; --dur-base: 220ms;
   --ease-out: cubic-bezier(0.16,1,0.3,1);
@@ -100,7 +100,7 @@ textarea, input { font-family: var(--font-body); }
   box-shadow: var(--shadow-accent);
 }
 .bg-btn-primary:hover:not(:disabled) {
-  box-shadow: 0 0 28px rgba(90,255,110,.5); transform: translateY(-1px);
+  box-shadow: 0 0 28px rgba(13,110,82,.4); transform: translateY(-1px);
 }
 .bg-btn-secondary {
   background: var(--bg-raised); color: var(--text-primary);
@@ -233,7 +233,7 @@ textarea, input { font-family: var(--font-body); }
    ═══════════════════════════════════════════════════════════ */
 #screen-name {
   align-items: center; justify-content: center;
-  background: radial-gradient(ellipse at center, #0f2210 0%, var(--bg-screen) 70%);
+  background: radial-gradient(ellipse at center, #b8e4dc 0%, var(--bg-screen) 70%);
 }
 .name-card {
   text-align: center; width: min(400px,90vw);
@@ -242,7 +242,7 @@ textarea, input { font-family: var(--font-body); }
 .name-title {
   font-family: var(--font-display); font-size: var(--text-2xl);
   color: var(--accent); margin-bottom: var(--sp-2);
-  text-shadow: 0 0 30px rgba(90,255,110,.4);
+  text-shadow: 0 0 20px rgba(13,110,82,.3);
 }
 .name-sub {
   color: var(--text-secondary); font-style: italic;
@@ -449,8 +449,8 @@ textarea, input { font-family: var(--font-body); }
   border: 1px solid var(--bg-border); background: var(--bg-panel);
   transition: all var(--dur-base);
 }
-.musgo-pip.filled { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 6px rgba(90,255,110,.5); }
-.musgo-pip.danger { background: var(--danger); border-color: var(--danger); box-shadow: 0 0 6px rgba(248,113,113,.5); }
+.musgo-pip.filled { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 6px rgba(13,110,82,.4); }
+.musgo-pip.danger { background: var(--danger); border-color: var(--danger); box-shadow: 0 0 6px rgba(181,42,42,.4); }
 
 /* ── GM PLAYER TABLE ─────────────────────── */
 .gm-players-grid { display: flex; flex-direction: column; gap: var(--sp-2); }
@@ -493,8 +493,23 @@ textarea, input { font-family: var(--font-body); }
 .rules-table th { background: var(--bg-raised); color: var(--text-secondary); padding: var(--sp-1) var(--sp-2); font-family: var(--font-mono); text-align: left; }
 .rules-table td { padding: var(--sp-1) var(--sp-2); border-bottom: 1px solid var(--bg-border); color: var(--text-primary); }
 
-/* ── VOICE MODAL ─────────────────────────── */
-.jitsi-frame { width: 100%; height: 500px; border: none; border-radius: var(--radius-md); }
+
+
+/* ── TOOLTIP ─────────────────────────────── */
+.has-tooltip { position: relative; cursor: help; }
+.has-tooltip .tooltip {
+  visibility: hidden; opacity: 0;
+  position: absolute; left: 0; top: 100%; margin-top: 4px;
+  background: var(--bg-panel); border: 1px solid var(--accent);
+  color: var(--text-primary); font-family: var(--font-body);
+  font-size: var(--text-sm); line-height: 1.5;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-md);
+  min-width: 240px; max-width: 340px; z-index: 500;
+  transition: opacity var(--dur-fast); pointer-events: none;
+  white-space: normal;
+}
+.has-tooltip:hover .tooltip { visibility: visible; opacity: 1; }
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
@@ -541,7 +556,6 @@ textarea, input { font-family: var(--font-body); }
       <div class="bg-chip gm" style="--chip-color:var(--player-0)" id="gm-chip"></div>
       <button id="btn-lock-table" class="bg-btn bg-btn-ghost" onclick="toggleLockTable()" title="Fechar/Abrir mesa a novos jogadores">🔓 Aberta</button>
       <button class="bg-btn bg-btn-ghost" onclick="showRules()">📖</button>
-      <button class="bg-btn bg-btn-ghost" onclick="showVoice()">🎙</button>
       <button class="bg-btn bg-btn-danger" onclick="leaveGame()">Sair</button>
     </div>
     <div class="gm-body">
@@ -554,11 +568,14 @@ textarea, input { font-family: var(--font-body); }
           <button class="bg-btn bg-btn-ghost" onclick="clearScene()">✕</button>
         </div>
 
+        <div class="section-title" style="margin-top:var(--sp-2)">Localização Actual</div>
+        <div style="display:flex;gap:var(--sp-2)">
+          <input id="gm-location-input" class="bg-input" type="text" maxlength="120" placeholder="Ex: Caverna Pré-Histórica · Subsolo 3">
+          <button class="bg-btn bg-btn-secondary" onclick="sendLocation()">📍</button>
+        </div>
+
         <div class="section-title" style="margin-top:var(--sp-2)">Push de Media</div>
-        <select id="gm-media-type" class="bg-input" style="margin-bottom:var(--sp-1)">
-          <option value="image">🖼 Imagem (URL)</option>
-          <option value="video">▶ Vídeo (YouTube URL)</option>
-        </select>
+<div class="bg-label" style="margin-bottom:var(--sp-1)">🖼 Imagem (URL)</div>
         <input id="gm-media-url" class="bg-input" type="text" placeholder="https://...">
         <div style="display:flex;gap:var(--sp-2);margin-top:var(--sp-1)">
           <button class="bg-btn bg-btn-warn" style="flex:1" onclick="pushMedia()">📤 Push</button>
@@ -604,8 +621,13 @@ textarea, input { font-family: var(--font-body); }
       <div class="bg-chip" id="player-chip" style="--chip-color:var(--player-1)"></div>
       <button class="bg-btn bg-btn-ghost" onclick="showCharEditor()">👤 Personagem</button>
       <button class="bg-btn bg-btn-ghost" onclick="showRules()">📖</button>
-      <button class="bg-btn bg-btn-ghost" onclick="showVoice()">🎙</button>
       <button class="bg-btn bg-btn-danger" onclick="leaveGame()">Sair</button>
+    </div>
+
+    <!-- Location bar -->
+    <div id="player-location-bar" style="display:none;background:var(--bg-abyss);border-bottom:1px solid var(--bg-border);padding:var(--sp-1) var(--sp-4);display:flex;align-items:center;gap:var(--sp-2)">
+      <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-secondary);text-transform:uppercase;letter-spacing:.06em;">📍 Localização:</span>
+      <span id="player-location-text" style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--accent);font-weight:600"></span>
     </div>
 
     <!-- Scene text from GM -->
@@ -678,7 +700,10 @@ textarea, input { font-family: var(--font-body); }
       </div>
       <div>
         <label class="bg-label">Background (D66 ou livre)</label>
-        <input id="ce-background" class="bg-input" type="text" maxlength="200" placeholder="Uma linha que define quem és">
+        <div style="display:flex;gap:var(--sp-2)">
+          <input id="ce-background" class="bg-input" type="text" maxlength="200" placeholder="Uma linha que define quem és">
+          <button class="bg-btn bg-btn-secondary" onclick="rollBackground()" title="Rolar D66 para background aleatório" style="white-space:nowrap;flex-shrink:0">🎲 D66</button>
+        </div>
       </div>
       <div class="full-width">
         <label class="bg-label">Motivação</label>
@@ -825,22 +850,7 @@ textarea, input { font-family: var(--font-body); }
   </div>
 </div>
 
-<!-- ═══════════ MODAL: VOICE ═══════════ -->
-<div id="modal-voice" class="bg-modal-overlay hidden">
-  <div class="bg-modal-box" style="width:min(800px,95vw)">
-    <div class="bg-modal-header">
-      <span class="bg-modal-title">🎙 Voz / Vídeo</span>
-      <button class="bg-btn bg-btn-ghost" onclick="hideVoice()">✕</button>
-    </div>
-    <div id="jitsi-container">
-      <p style="color:var(--text-secondary);font-size:var(--text-sm);margin-bottom:var(--sp-4)">
-        Sala de voz partilhada para esta mesa. Usa o browser para voz e vídeo.
-      </p>
-      <iframe id="jitsi-frame" class="jitsi-frame" allow="camera; microphone; display-capture"></iframe>
-    </div>
-    <button class="bg-btn bg-btn-ghost" onclick="hideVoice()" style="margin-top:var(--sp-3);width:100%">Fechar</button>
-  </div>
-</div>
+
 
 <!-- Banner -->
 <div id="bg-banner" class="bg-banner"></div>
@@ -1027,6 +1037,11 @@ function renderGame(state) {
 function renderGM(state) {
   // Topbar
   document.getElementById('gm-table-name').textContent = state.tableName;
+  // Sync GM location input if server has a value
+  const locInput = document.getElementById('gm-location-input');
+  if (locInput && state.location && !locInput.matches(':focus')) {
+    locInput.value = state.location;
+  }
   const me = state.players.find(p => p.seat === state.mySeat);
   if (me) {
     const chip = document.getElementById('gm-chip');
@@ -1077,9 +1092,19 @@ function renderGM(state) {
     const diceHtml = p.diceResults
       ? `<div class="player-card-dice">${p.diceResults.notation} = ${p.diceResults.total}</div>`
       : '';
+    const tooltipContent = [
+      char.background ? `<strong>Background:</strong> ${char.background}` : '',
+      char.motivation ? `<strong>Motivação:</strong> ${char.motivation}` : '',
+      char.virtue     ? `<strong>Virtude:</strong> ${char.virtue}` : '',
+      char.fear       ? `<strong>Medo:</strong> ${char.fear}` : '',
+      char.lineage    ? `<strong>Linhagem:</strong> ${char.lineage}` : '',
+    ].filter(Boolean).join('<br>');
     row.innerHTML = `
       <div>
-        <div class="bg-chip${p.isGM?' gm':''}" style="--chip-color:${p.color}">${p.isGM?'⬡ ':''}${p.name}</div>
+        <div class="has-tooltip">
+          <div class="bg-chip${p.isGM?' gm':''}" style="--chip-color:${p.color}">${p.isGM?'⬡ ':''}${p.name}</div>
+          ${tooltipContent ? `<div class="tooltip">${tooltipContent}</div>` : ''}
+        </div>
         <div style="font-size:var(--text-xs);color:var(--text-secondary);margin-top:4px">${p.online?'● Online':'○ Offline'}</div>
       </div>
       <div>
@@ -1121,6 +1146,16 @@ function renderPlayer(state) {
     chip.style.setProperty('--chip-color', me.color);
   }
 
+  // Location bar
+  const locBar  = document.getElementById('player-location-bar');
+  const locText = document.getElementById('player-location-text');
+  if (state.location) {
+    locBar.style.display  = 'flex';
+    locText.textContent   = state.location;
+  } else {
+    locBar.style.display  = 'none';
+  }
+
   // Scene text
   const sceneEl = document.getElementById('player-scene-text');
   if (state.sceneText) {
@@ -1137,13 +1172,6 @@ function renderPlayer(state) {
     mediaEl.classList.remove('empty');
     if (state.mediaPush.type === 'image') {
       mediaEl.innerHTML = `<img src="${escHtml(state.mediaPush.data)}" alt="GM media">`;
-    } else if (state.mediaPush.type === 'video') {
-      const ytId = extractYoutubeId(state.mediaPush.data);
-      if (ytId) {
-        mediaEl.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=0" allowfullscreen></iframe>`;
-      } else {
-        mediaEl.innerHTML = `<video src="${escHtml(state.mediaPush.data)}" controls style="width:100%;max-height:250px"></video>`;
-      }
     }
   } else {
     mediaEl.classList.add('empty');
@@ -1307,9 +1335,65 @@ function sendChat(who) {
 }
 
 // ── SCENE ─────────────────────────────────────────────────────
+const D66_BACKGROUNDS = {
+  11: "Oceanógrafa que há três anos não consegue distinguir se os seus sonhos acontecem antes ou depois de adormecer",
+  12: "Percussionista de música experimental contratado porque a Coligação acredita que o Musgo responde a ritmo",
+  13: "Criança prodígio de 11 anos que desenha mapas de lugares onde nunca esteve com precisão cartográfica",
+  14: "Ex-mineiro que sobreviveu 40 dias soterrado e desde então vê as paredes a respirar — e acha isso normal",
+  15: "Perfumista que consegue cheirar emoções em pessoas e há seis meses detecta algo novo que não tem nome",
+  16: "Monge que abandonou o mosteiro após uma meditação que durou aparentemente três segundos e subjectivamente trinta anos",
+  21: "Taxidermista obcecada com a ideia de que os animais que prepara continuam a comunicar entre si",
+  22: "Programador que acredita ter encontrado nas sequências do Musgo uma linguagem mais antiga que o ADN",
+  23: "Fotógrafa cujas fotos revelam detalhes que ela própria não viu ao fotografar",
+  24: "Geóloga que fala com rochas não metaforicamente — e de vez em quando elas respondem",
+  25: "Apicultor que perdeu todas as abelhas numa noite e encontrou-as três semanas depois formando padrões no oceano",
+  26: "Enfermeira de cuidados paliativos que descreve o momento da morte como uma porta que nunca fecha completamente",
+  31: "Linguista especializada em línguas extintas que começou a escrever numa que não reconhece",
+  32: "Chef que desde o contacto com o Musgo só cozinha sabores que as pessoas descrevem como memórias de infância que não tiveram",
+  33: "Astronauta reformada convicta de que o espaço exterior e o interior são a mesma coisa vista de ângulos diferentes",
+  34: "Botânica de 78 anos que afirma que as plantas sempre foram a forma de inteligência dominante",
+  35: "Artista plástico que só trabalha de olhos fechados e cujas obras parecem imagens de satélite de zonas afectadas",
+  36: "Psiquiatra que tratou doze casos de síndrome de Musgo e desenvolveu todos os sintomas sem sair do consultório",
+  41: "Mergulhador que ficou preso numa caverna submarina 6 horas e saiu convicto de ter tido uma longa conversa com alguém",
+  42: "Bibliotecária que encontrou na sua colecção livros que não existem na edição que tem em casa",
+  43: "Veterinária que nota que predador e presa afectados pelo Musgo ficam lado a lado, sem conflito",
+  44: "Engenheiro de som que gravou frequências no oceano afectado que só são audíveis em sonho",
+  45: "Alpinista que desceu de expedição no Ártico incapaz de descrever o que viu mas com os cabelos definitivamente de outra cor",
+  46: "Adolescente que foi documentar o fenómeno por likes e os seus vídeos mostram coisas diferentes do que filmou",
+  51: "Professor de filosofia pré-socrática convicto de que Anaximandro descreveu o Musgo 2600 anos antes",
+  52: "Técnico de telecomunicações que detectou no espectro do Musgo sinais que correspondem a transmissões de rádio dos anos 40",
+  53: "Escultora cega desde o nascimento que afirma que com Musgo suficiente consegue ver — mas não com os olhos",
+  54: "Ex-viciado que descreve o Musgo como a única coisa que não o faz fugir de si mesmo, mas em direcção a si",
+  55: "Criança de 7 anos incluída por insistência dos pais — ela diz que já esteve aqui antes",
+  56: "Jornalista que foi cobrir a história, enviou um artigo devastador, e não tem memória de o ter escrito",
+  61: "Sonâmbulo cujos trajectos nocturnos formam, mapeados, os mesmos padrões das manchas atlânticas",
+  62: "Economista comportamental que estuda por que é que as pessoas querem ser contaminadas",
+  63: "Relojoeiro que desde a exposição ao Musgo não consegue usar relógios — param todos ao mesmo tempo",
+  64: "Bailarina que recuperou completamente de lesão incapacitante após contacto com Musgo mas move-se anatomicamente de forma impossível",
+  65: "Agente enviado para vigiar a expedição que já não tem a certeza de quem são os seus superiores",
+  66: "Ninguém sabe quem este personagem é. Ele também não. A Coligação tem os documentos mas as fotos são de outra pessoa",
+};
+
+function rollBackground() {
+  const d1 = Math.floor(Math.random() * 6) + 1;
+  const d2 = Math.floor(Math.random() * 6) + 1;
+  const key = d1 * 10 + d2;
+  const bg = D66_BACKGROUNDS[key];
+  if (bg) {
+    document.getElementById('ce-background').value = bg;
+    showBanner('🎲 D66: ' + d1 + '' + d2 + ' — Background atribuído', 'confirm');
+  }
+}
+
 function toggleLockTable() {
   const isLocked = gameState?.locked;
   send({ type: isLocked ? 'UNLOCK_TABLE' : 'LOCK_TABLE' });
+}
+
+function sendLocation() {
+  const text = document.getElementById('gm-location-input').value.trim();
+  send({ type: 'GM_SET_LOCATION', text });
+  showBanner('📍 Localização actualizada', 'confirm');
 }
 
 function sendScene() {
@@ -1324,11 +1408,10 @@ function clearScene() {
 
 // ── MEDIA ─────────────────────────────────────────────────────
 function pushMedia() {
-  const mediaType = document.getElementById('gm-media-type').value;
   const data = document.getElementById('gm-media-url').value.trim();
   if (!data) { showBanner('Introduz um URL', 'danger'); return; }
-  send({ type: 'GM_PUSH_MEDIA', mediaType, data });
-  showBanner('📤 Media enviada para jogadores', 'confirm');
+  send({ type: 'GM_PUSH_MEDIA', mediaType: 'image', data });
+  showBanner('📤 Imagem enviada para jogadores', 'confirm');
 }
 function clearMedia() {
   document.getElementById('gm-media-url').value = '';
@@ -1525,16 +1608,7 @@ function hideRules() { document.getElementById('modal-rules').classList.add('hid
 // ══════════════════════════════════════════════════════════════
 // VOICE MODAL
 // ══════════════════════════════════════════════════════════════
-function showVoice() {
-  const roomName = 'mundomusgo-' + (myLobbyId||'M1').toLowerCase();
-  document.getElementById('jitsi-frame').src =
-    `https://meet.jit.si/${roomName}#config.startWithAudioMuted=false&config.startWithVideoMuted=true&userInfo.displayName=${encodeURIComponent(myName||'Jogador')}`;
-  document.getElementById('modal-voice').classList.remove('hidden');
-}
-function hideVoice() {
-  document.getElementById('jitsi-frame').src = '';
-  document.getElementById('modal-voice').classList.add('hidden');
-}
+
 
 // ══════════════════════════════════════════════════════════════
 // UTILS
@@ -1544,10 +1618,7 @@ function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function extractYoutubeId(url) {
-  const m = url.match(/(?:youtu\.be\/|v=)([A-Za-z0-9_-]{11})/);
-  return m ? m[1] : null;
-}
+
 
 // ══════════════════════════════════════════════════════════════
 // KEYBOARD SHORTCUTS
@@ -1565,7 +1636,7 @@ document.addEventListener('keydown', e => {
 });
 
 // Close modals on overlay click
-['modal-char','modal-rules','modal-voice'].forEach(id => {
+['modal-char','modal-rules'].forEach(id => {
   document.getElementById(id).addEventListener('click', e => {
     if (e.target === e.currentTarget)
       e.currentTarget.classList.add('hidden');

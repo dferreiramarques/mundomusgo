@@ -96,6 +96,7 @@ function initGame(lobby) {
   lobby.game = {
     phase:      'PLAYING',
     sceneText:  '',
+    location:   '',
     mediaPush:  null,
     chat:       [],
     sceneLog:   [],
@@ -128,6 +129,7 @@ function buildGameState(lobby, forSeat) {
     phase:      g.phase,
     tableName:  lobby.name,
     locked:     !!lobby.locked,
+    location:   g.location || '',
     mySeat:     forSeat,
     isGM:       forSeat === 0,
     sceneText:  g.sceneText,
@@ -426,6 +428,15 @@ wss.on('connection', (ws) => {
           xp:         Math.max(0, Math.min(99, parseInt(char.xp)     || 0)),
           notes:      String(char.notes      || '').slice(0, 1000),
         };
+        broadcastGameState(lobby);
+        break;
+      }
+
+      case 'GM_SET_LOCATION': {
+        if (!state || state.seat !== 0) break;
+        const lobby = lobbies[state.lobbyId];
+        if (!lobby || !lobby.game) break;
+        lobby.game.location = (msg.text || '').trim().slice(0, 120);
         broadcastGameState(lobby);
         break;
       }
