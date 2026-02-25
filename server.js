@@ -29,6 +29,7 @@ function createLobby(id, name) {
     names:    new Array(6).fill(''),
     tokens:   new Array(6).fill(null),
     graceTimers: new Array(6).fill(null),
+    locked: false,
     game: null,
   };
 }
@@ -73,6 +74,7 @@ function lobbyView(lobby) {
     maxPlayers:  lobby.maxPlayers,
     playerCount: occupied,
     hasGM,
+    locked:      !!lobby.locked,
     inGame:      !!(lobby.game && lobby.game.phase === 'PLAYING'),
     playerNames: lobby.names.filter(n => n),
   };
@@ -125,6 +127,7 @@ function buildGameState(lobby, forSeat) {
   return {
     phase:      g.phase,
     tableName:  lobby.name,
+    locked:     !!lobby.locked,
     mySeat:     forSeat,
     isGM:       forSeat === 0,
     sceneText:  g.sceneText,
@@ -178,6 +181,10 @@ function handleJoin(ws, lobbyId, playerName) {
     if (!lobby.names[i]) { seat = i; break; }
   }
   if (seat === -1) return send(ws, { type:'ERROR', text:'Mesa cheia.' });
+
+  // Block new players if GM locked the table (seat 0 = GM always allowed)
+  if (lobby.locked && seat !== 0)
+    return send(ws, { type:'ERROR', text:'Mesa fechada pelo GM.' });
 
   // Kick previous connection if any
   const oldWs = lobby.sockets[seat];
@@ -420,6 +427,28 @@ wss.on('connection', (ws) => {
           notes:      String(char.notes      || '').slice(0, 1000),
         };
         broadcastGameState(lobby);
+        break;
+      }
+
+      case 'LOCK_TABLE': {
+        if (!state || state.seat !== 0) break;
+        const lobby = lobbies[state.lobbyId];
+        if (!lobby) break;
+        lobby.locked = true;
+        addChat(lobby, 0, lobby.names[0], '🔒 Mesa fechada pelo GM — sem novos jogadores.', true);
+        broadcastGameState(lobby);
+        broadcastLobbies();
+        break;
+      }
+
+      case 'UNLOCK_TABLE': {
+        if (!state || state.seat !== 0) break;
+        const lobby = lobbies[state.lobbyId];
+        if (!lobby) break;
+        lobby.locked = false;
+        addChat(lobby, 0, lobby.names[0], '🔓 Mesa aberta pelo GM — podem entrar novos jogadores.', true);
+        broadcastGameState(lobby);
+        broadcastLobbies();
         break;
       }
 
