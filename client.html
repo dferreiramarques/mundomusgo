@@ -539,6 +539,7 @@ textarea, input { font-family: var(--font-body); }
       <span class="bg-topbar-title">Mundo Musgo</span>
       <span id="gm-table-name" style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-secondary)"></span>
       <div class="bg-chip gm" style="--chip-color:var(--player-0)" id="gm-chip"></div>
+      <button id="btn-lock-table" class="bg-btn bg-btn-ghost" onclick="toggleLockTable()" title="Fechar/Abrir mesa a novos jogadores">🔓 Aberta</button>
       <button class="bg-btn bg-btn-ghost" onclick="showRules()">📖</button>
       <button class="bg-btn bg-btn-ghost" onclick="showVoice()">🎙</button>
       <button class="bg-btn bg-btn-danger" onclick="leaveGame()">Sair</button>
@@ -973,23 +974,25 @@ function renderLobbyList(lobbies) {
     const card = document.createElement('div');
     card.className = 'mesa-card anim-fade-in';
     const occupied = l.playerCount;
-    const statusText = l.inGame
-      ? `<span style="color:var(--warning)">● Em Jogo</span>`
-      : `<span style="color:var(--confirm)">● Aberta</span>`;
+    const statusText = l.locked
+      ? `<span style="color:var(--danger)">🔒 Fechada</span>`
+      : l.inGame
+        ? `<span style="color:var(--warning)">● Em Jogo</span>`
+        : `<span style="color:var(--confirm)">● Aberta</span>`;
     const pipsHtml = l.playerNames.map((n, i) =>
       `<div class="bg-chip" style="--chip-color:var(--player-${i})">${i===0?'⬡ ':''}${n}</div>`
     ).join('');
     const gmInfo = l.hasGM
       ? `<div class="mesa-card-gm">GM: ${l.playerNames[0]||'?'}</div>`
       : `<div class="mesa-card-gm" style="color:var(--accent)">Primeiro a entrar será GM</div>`;
-    const canJoin = !l.inGame && occupied < l.maxPlayers;
+    const canJoin = !l.locked && occupied < l.maxPlayers;
     card.innerHTML = `
       <div class="mesa-card-name">${l.name}</div>
       <div class="mesa-card-status">${statusText} · ${occupied}/${l.maxPlayers} jogadores</div>
       ${gmInfo}
       <div class="mesa-card-players">${pipsHtml || '<span style="color:var(--text-secondary);font-size:var(--text-xs)">Vazia</span>'}</div>
       <button class="bg-btn ${canJoin?'bg-btn-primary':'bg-btn-ghost'}" ${canJoin?'':'disabled'} onclick="joinLobby('${l.id}')">
-        ${l.inGame ? 'Em jogo' : canJoin ? 'Entrar →' : 'Cheia'}
+        ${l.locked ? '🔒 Fechada' : canJoin ? 'Entrar →' : 'Cheia'}
       </button>
     `;
     grid.appendChild(card);
@@ -1029,6 +1032,19 @@ function renderGM(state) {
     const chip = document.getElementById('gm-chip');
     chip.textContent = '⬡ ' + me.name;
     chip.style.setProperty('--chip-color', me.color);
+  }
+  // Update lock button
+  const lockBtn = document.getElementById('btn-lock-table');
+  if (lockBtn) {
+    if (state.locked) {
+      lockBtn.textContent = '🔒 Fechada';
+      lockBtn.style.color = 'var(--danger)';
+      lockBtn.style.borderColor = 'rgba(248,113,113,.4)';
+    } else {
+      lockBtn.textContent = '🔓 Aberta';
+      lockBtn.style.color = '';
+      lockBtn.style.borderColor = '';
+    }
   }
 
   // Dice buttons (build once)
@@ -1291,6 +1307,11 @@ function sendChat(who) {
 }
 
 // ── SCENE ─────────────────────────────────────────────────────
+function toggleLockTable() {
+  const isLocked = gameState?.locked;
+  send({ type: isLocked ? 'UNLOCK_TABLE' : 'LOCK_TABLE' });
+}
+
 function sendScene() {
   const text = document.getElementById('gm-scene-input').value.trim();
   send({ type: 'GM_SCENE', text });
