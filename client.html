@@ -1558,8 +1558,8 @@ document.getElementById('btn-confirm-name').addEventListener('click', () => {
   const name = document.getElementById('input-name').value.trim().slice(0, 24);
   if (!name) return;
   myName = name;
+  renderLobbyList(cachedLobbies);
   send({ type: 'LOBBIES' });
-  showScreen('screen-lobby');
 });
 document.getElementById('input-name').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('btn-confirm-name').click();
@@ -1568,6 +1568,7 @@ document.getElementById('input-name').addEventListener('keydown', e => {
 // ══════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════
+showScreen('screen-name');
 connect();
 </script>
 </body>
