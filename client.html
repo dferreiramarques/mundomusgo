@@ -49,7 +49,7 @@ textarea, input { font-family: var(--font-body); }
   --danger:   #b52a2a;
   --gm-color: #0d6e52;
 
-  --player-0: #065040;
+  --player-0: #0a2118;
   --player-1: #1a5fa8;
   --player-2: #8a5c00;
   --player-3: #b52a2a;
@@ -586,14 +586,7 @@ textarea, input { font-family: var(--font-body); }
     <div class="gm-body">
       <!-- LEFT: Scene + Media + Dice -->
       <div class="gm-left">
-        <div class="section-title">Cena — Texto para Jogadores</div>
-        <textarea id="gm-scene-input" class="bg-textarea" rows="5" placeholder="Escreve a cena... o texto será enviado para todos os jogadores."></textarea>
-        <div style="display:flex;gap:var(--sp-2)">
-          <button class="bg-btn bg-btn-primary" style="flex:1" onclick="sendScene()">📡 Enviar Cena</button>
-          <button class="bg-btn bg-btn-ghost" onclick="clearScene()">✕</button>
-        </div>
-
-        <div class="section-title" style="margin-top:var(--sp-2)">Localização Actual</div>
+        <div class="section-title">Localização Actual</div>
         <div style="display:flex;gap:var(--sp-2)">
           <input id="gm-location-input" class="bg-input" type="text" maxlength="120" placeholder="Ex: Caverna Pré-Histórica · Subsolo 3">
           <button class="bg-btn bg-btn-secondary" onclick="sendLocation()">📍</button>
@@ -629,8 +622,15 @@ textarea, input { font-family: var(--font-body); }
         </div>
       </div>
 
-      <!-- CENTER: Players -->
+      <!-- CENTER: Scene + Players -->
       <div class="gm-center">
+        <div class="section-title">Cena — Texto para Jogadores</div>
+        <textarea id="gm-scene-input" class="bg-textarea" rows="4" placeholder="Escreve a cena... o texto será enviado para todos os jogadores."></textarea>
+        <div style="display:flex;gap:var(--sp-2);margin-bottom:var(--sp-3)">
+          <button class="bg-btn bg-btn-primary" style="flex:1" onclick="sendScene()">📡 Enviar Cena</button>
+          <button class="bg-btn bg-btn-ghost" onclick="clearScene()">✕</button>
+        </div>
+
         <div class="section-title">Jogadores na Mesa</div>
         <div class="gm-players-grid" id="gm-players-grid"></div>
 
