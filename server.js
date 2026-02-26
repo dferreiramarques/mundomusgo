@@ -10,7 +10,7 @@ const PORT       = process.env.PORT || 3000;
 const GRACE_MS   = 30_000;   // reconnect window
 const MAX_CHAT   = 80;
 const MAX_LOG    = 200;
-const PLAYER_COLORS = ['#5aff6e','#60a5fa','#f59e0b','#f87171','#c084fc','#a78bfa'];
+const PLAYER_COLORS = ['#0a2118','#1a5fa8','#8a5c00','#b52a2a','#6b35a8','#2a6e8a'];
 
 // ── STATIC FILE ────────────────────────────────────────────────────────────
 const CLIENT_HTML = fs.readFileSync(path.join(__dirname, 'client.html'), 'utf8');
@@ -272,6 +272,22 @@ const server = http.createServer((req, res) => {
       'Content-Disposition': `attachment; filename="musgo-log-${lobbyId}-${Date.now()}.json"`,
     });
     res.end(json);
+    return;
+  }
+
+  // Serve /docs/*.pdf static files
+  if (urlParsed.pathname.startsWith('/docs/')) {
+    const safeName = path.basename(urlParsed.pathname);   // strip any traversal
+    const filePath = path.join(__dirname, 'public', 'docs', safeName);
+    if (!safeName.endsWith('.pdf')) { res.writeHead(404); res.end('Not found'); return; }
+    fs.readFile(filePath, (err, data) => {
+      if (err) { res.writeHead(404); res.end('PDF não encontrado. Coloca o ficheiro em public/docs/'); return; }
+      res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${safeName}"`,
+      });
+      res.end(data);
+    });
     return;
   }
 
