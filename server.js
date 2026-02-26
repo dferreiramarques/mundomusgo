@@ -103,6 +103,7 @@ function initGame(lobby) {
     characters: new Array(6).fill(null),  // character per seat
     lastAction: new Array(6).fill(''),
     diceResults: new Array(6).fill(null),
+    npcs: [],          // active NPCs in scene
   };
 }
 
@@ -138,6 +139,7 @@ function buildGameState(lobby, forSeat) {
     chat:       g.chat.slice(-MAX_CHAT),
     sceneLog:   g.sceneLog.slice(-MAX_LOG),
     myCharacter: g.characters[forSeat],
+    npcs:        g.npcs || [],
   };
 }
 
@@ -460,6 +462,53 @@ wss.on('connection', (ws) => {
         addChat(lobby, 0, lobby.names[0], '🔓 Mesa aberta pelo GM — podem entrar novos jogadores.', true);
         broadcastGameState(lobby);
         broadcastLobbies();
+        break;
+      }
+
+      case 'KILL_PLAYER': {
+        if (!state || state.seat !== 0) break;
+        const lobby = lobbies[state.lobbyId];
+        if (!lobby || !lobby.game) break;
+        const targetSeat = parseInt(msg.seat);
+        const targetName = lobby.names[targetSeat] || '?';
+        const charName   = lobby.game.characters[targetSeat]?.name || targetName;
+        addLog(lobby, { type: 'kill', content: `${charName} foi abatido.`, playerName: 'GM' });
+        addChat(lobby, 0, lobby.names[0], `☠ ${charName} foi abatido. O jogador deve actualizar a sua personagem.`, true);
+        broadcastGameState(lobby);
+        break;
+      }
+
+      case 'SPAWN_NPC': {
+        if (!state || state.seat !== 0) break;
+        const lobby = lobbies[state.lobbyId];
+        if (!lobby || !lobby.game) break;
+        const npc = msg.npc || {};
+        const uid = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        const entry = {
+          uid,
+          name:     String(npc.name     || 'NPC').slice(0, 60),
+          faction:  String(npc.faction  || '').slice(0, 60),
+          forca:    Math.max(1, Math.min(99, parseInt(npc.forca) || 15)),
+          behavior: ['Hostile','Friendly','Fearful','Curious','Neutral'].includes(npc.behavior) ? npc.behavior : 'Neutral',
+          notes:    String(npc.notes || '').slice(0, 400),
+        };
+        lobby.game.npcs.push(entry);
+        addLog(lobby, { type: 'scene', content: `[NPC] ${entry.name} entrou em cena. (F:${entry.forca} · ${entry.behavior})`, playerName: 'GM' });
+        broadcastGameState(lobby);
+        break;
+      }
+
+      case 'REMOVE_NPC': {
+        if (!state || state.seat !== 0) break;
+        const lobby = lobbies[state.lobbyId];
+        if (!lobby || !lobby.game) break;
+        const uid = msg.uid;
+        const npc = lobby.game.npcs.find(n => n.uid === uid);
+        if (npc) {
+          lobby.game.npcs = lobby.game.npcs.filter(n => n.uid !== uid);
+          addLog(lobby, { type: 'scene', content: `[NPC] ${npc.name} saiu de cena.`, playerName: 'GM' });
+        }
+        broadcastGameState(lobby);
         break;
       }
 

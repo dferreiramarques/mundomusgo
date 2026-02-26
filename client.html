@@ -7,7 +7,7 @@
 <title>Mundo Musgo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
    BITNIKGAMES DESIGN SYSTEM — Mundo Musgo Theme
@@ -49,7 +49,7 @@ textarea, input { font-family: var(--font-body); }
   --danger:   #b52a2a;
   --gm-color: #0d6e52;
 
-  --player-0: #0d6e52;
+  --player-0: #065040;
   --player-1: #1a5fa8;
   --player-2: #8a5c00;
   --player-3: #b52a2a;
@@ -57,7 +57,7 @@ textarea, input { font-family: var(--font-body); }
   --player-5: #2a6e8a;
 
   --font-display: 'Cinzel Decorative', serif;
-  --font-body:    'IM Fell English', Georgia, serif;
+  --font-body:    'Playfair Display', Georgia, serif;
   --font-mono:    'JetBrains Mono', monospace;
 
   --text-xs:   0.7rem;
@@ -433,7 +433,7 @@ textarea, input { font-family: var(--font-body); }
 /* ── CHARACTER MINI ─────────────────────── */
 .char-mini { display: flex; flex-direction: column; gap: var(--sp-2); }
 .char-mini-name { font-family: var(--font-display); font-size: var(--text-sm); color: var(--accent); }
-.char-mini-bg { font-style: italic; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.3; }
+.char-mini-bg { font-style: italic; font-size: var(--text-xs); color: var(--text-secondary); line-height: 1.5; white-space: normal; word-break: break-word; }
 .char-stats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-1); }
 .stat-box {
   background: var(--bg-raised); border: 1px solid var(--bg-border);
@@ -511,6 +511,31 @@ textarea, input { font-family: var(--font-body); }
 }
 .has-tooltip:hover .tooltip { visibility: visible; opacity: 1; }
 
+/* ── NPC ─────────────────────────────────── */
+.npc-card {
+  background: var(--bg-raised); border: 1px solid var(--bg-border);
+  border-radius: var(--radius-md); padding: var(--sp-2);
+  margin-bottom: var(--sp-2);
+  display: grid; grid-template-columns: 1fr auto;
+  gap: var(--sp-2); align-items: start;
+}
+.npc-card.hostile { border-left: 3px solid var(--danger); }
+.npc-card.friendly { border-left: 3px solid var(--confirm); }
+.npc-card.fearful  { border-left: 3px solid var(--warning); }
+.npc-card.curious  { border-left: 3px solid var(--accent); }
+.npc-name { font-weight: 600; font-size: var(--text-sm); color: var(--text-primary); }
+.npc-meta { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-secondary); }
+.npc-notes { font-size: var(--text-xs); color: var(--text-secondary); font-style: italic; line-height: 1.4; margin-top: 2px; white-space: normal; }
+.npc-template-btn {
+  background: var(--bg-panel); border: 1px solid var(--bg-border);
+  border-radius: var(--radius-md); padding: var(--sp-2);
+  cursor: pointer; text-align: left;
+  transition: border-color var(--dur-fast), background var(--dur-fast);
+}
+.npc-template-btn:hover { border-color: var(--accent); background: var(--bg-raised); }
+.npc-template-name { font-weight: 600; font-size: var(--text-sm); color: var(--text-primary); }
+.npc-template-meta { font-size: var(--text-xs); color: var(--text-secondary); margin-top: 2px; }
+
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .gm-body { grid-template-columns: 1fr; }
@@ -575,7 +600,10 @@ textarea, input { font-family: var(--font-body); }
         </div>
 
         <div class="section-title" style="margin-top:var(--sp-2)">Push de Media</div>
-<div class="bg-label" style="margin-bottom:var(--sp-1)">🖼 Imagem (URL)</div>
+        <select id="gm-media-type" class="bg-input" style="margin-bottom:var(--sp-1)">
+          <option value="image">🖼 Imagem (URL)</option>
+          <option value="video">▶ Vídeo (YouTube URL)</option>
+        </select>
         <input id="gm-media-url" class="bg-input" type="text" placeholder="https://...">
         <div style="display:flex;gap:var(--sp-2);margin-top:var(--sp-1)">
           <button class="bg-btn bg-btn-warn" style="flex:1" onclick="pushMedia()">📤 Push</button>
@@ -593,13 +621,29 @@ textarea, input { font-family: var(--font-body); }
         <div class="section-title" style="margin-top:var(--sp-2)">Log da História</div>
         <div class="log-panel" id="gm-log-panel"></div>
         <button class="bg-btn bg-btn-secondary" onclick="downloadLog()">⬇ Gravar Log JSON</button>
+
+        <div class="section-title" style="margin-top:var(--sp-3)">Documentos</div>
+        <div style="display:flex;flex-direction:column;gap:var(--sp-1)">
+          <a href="/docs/mundo_musgo_gm.pdf" target="_blank" download class="bg-btn bg-btn-ghost" style="text-decoration:none;text-align:center">📄 Bíblia do GM</a>
+          <a href="/docs/mundo_musgo_season1.pdf" target="_blank" download class="bg-btn bg-btn-ghost" style="text-decoration:none;text-align:center">📄 Starter Set Season 1</a>
+        </div>
       </div>
 
       <!-- CENTER: Players -->
       <div class="gm-center">
         <div class="section-title">Jogadores na Mesa</div>
         <div class="gm-players-grid" id="gm-players-grid"></div>
+
+        <div class="section-title" style="margin-top:var(--sp-4)">NPCs em Cena</div>
+        <div style="margin-bottom:var(--sp-2);display:flex;gap:var(--sp-2)">
+          <button class="bg-btn bg-btn-secondary" style="flex:1" onclick="showNPCModal()">+ Criar NPC</button>
+          <button class="bg-btn bg-btn-ghost" onclick="showNPCModal('template')">📋 Templates</button>
+        </div>
+        <div id="gm-npc-list"></div>
       </div>
+
+      <!-- NPC strip at bottom of center -->
+      <!-- (NPC list rendered by renderGM) -->
 
       <!-- RIGHT: Chat -->
       <div class="gm-right">
@@ -851,6 +895,64 @@ textarea, input { font-family: var(--font-body); }
 </div>
 
 
+
+
+<!-- ═══════════ MODAL: NPC ═══════════ -->
+<div id="modal-npc" class="bg-modal-overlay hidden">
+  <div class="bg-modal-box" style="width:min(620px,96vw)">
+    <div class="bg-modal-header">
+      <span class="bg-modal-title" id="npc-modal-title">Criar NPC</span>
+      <button class="bg-btn bg-btn-ghost" onclick="hideNPCModal()">✕</button>
+    </div>
+
+    <!-- Template picker -->
+    <div id="npc-template-section" style="margin-bottom:var(--sp-4)">
+      <div class="bg-label">Templates do Starter Set</div>
+      <div id="npc-template-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--sp-2);margin-top:var(--sp-2)"></div>
+    </div>
+
+    <div style="border-top:1px solid var(--bg-border);padding-top:var(--sp-3);margin-top:var(--sp-1)">
+      <div class="bg-label">Ou cria um NPC personalizado</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-top:var(--sp-3)">
+      <div>
+        <label class="bg-label">Nome</label>
+        <input id="npc-name" class="bg-input" type="text" maxlength="60" placeholder="Nome do NPC">
+      </div>
+      <div>
+        <label class="bg-label">Facção / Tipo</label>
+        <input id="npc-faction" class="bg-input" type="text" maxlength="60" placeholder="Ex: Limiar, Baelfungious...">
+      </div>
+      <div>
+        <label class="bg-label">Força</label>
+        <div style="display:flex;gap:var(--sp-2);align-items:center">
+          <input id="npc-forca" class="bg-input" type="number" min="1" max="99" value="15" style="width:70px">
+          <button class="bg-btn bg-btn-ghost" onclick="rollNPCForca()">🎲</button>
+        </div>
+      </div>
+      <div>
+        <label class="bg-label">Comportamento</label>
+        <select id="npc-behavior" class="bg-input">
+          <option value="Neutral">Neutro</option>
+          <option value="Hostile">Hostil</option>
+          <option value="Friendly">Amigável</option>
+          <option value="Fearful">Com medo</option>
+          <option value="Curious">Curioso</option>
+        </select>
+      </div>
+      <div style="grid-column:span 2">
+        <label class="bg-label">Descrição / Notas</label>
+        <textarea id="npc-notes" class="bg-textarea" rows="3" placeholder="Aparência, motivação, segredos..."></textarea>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:var(--sp-2);margin-top:var(--sp-4)">
+      <button class="bg-btn bg-btn-ghost" onclick="hideNPCModal()">Cancelar</button>
+      <button class="bg-btn bg-btn-primary" onclick="spawnNPC()">Invocar NPC</button>
+    </div>
+  </div>
+</div>
 
 <!-- Banner -->
 <div id="bg-banner" class="bg-banner"></div>
@@ -1109,7 +1211,7 @@ function renderGM(state) {
       </div>
       <div>
         ${char.name ? `<div style="color:var(--text-primary);font-size:var(--text-sm)">${char.name}</div>` : ''}
-        ${char.background ? `<div style="color:var(--text-secondary);font-size:var(--text-xs);font-style:italic">${char.background.slice(0,80)}</div>` : ''}
+        ${char.background ? `<div style="color:var(--text-secondary);font-size:var(--text-xs);font-style:italic;white-space:normal;line-height:1.4">${char.background}</div>` : ''}
         ${p.lastAction ? `<div style="color:var(--warning);font-size:var(--text-xs);margin-top:4px">↳ ${p.lastAction}</div>` : ''}
         <div style="display:flex;gap:var(--sp-3);margin-top:var(--sp-1);font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-secondary)">
           ${char.forca !== undefined ? `<span>F:<strong style="color:var(--text-primary)">${char.forca}</strong></span>` : ''}
@@ -1119,14 +1221,18 @@ function renderGM(state) {
         </div>
         ${diceHtml}
       </div>
-      <div style="min-width:80px">
-        ${p.diceResults ? `<div style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--warning)">
+      <div style="min-width:80px;display:flex;flex-direction:column;gap:var(--sp-1);align-items:flex-end">
+        ${p.diceResults ? `<div style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--warning);text-align:right">
           ${p.diceResults.notation}<br><strong style="font-size:var(--text-base)">${p.diceResults.total}</strong>
         </div>` : ''}
+        ${!p.isGM ? `<button class="bg-btn bg-btn-danger" style="padding:2px 8px;font-size:0.7rem" onclick="killPlayer(${p.seat})">☠ Abater</button>` : ''}
       </div>
     `;
     grid.appendChild(row);
   });
+
+  // NPCs
+  renderNPCList(state.npcs || []);
 
   // Chat
   renderChat('gm-chat-messages', state.chat);
@@ -1172,6 +1278,13 @@ function renderPlayer(state) {
     mediaEl.classList.remove('empty');
     if (state.mediaPush.type === 'image') {
       mediaEl.innerHTML = `<img src="${escHtml(state.mediaPush.data)}" alt="GM media">`;
+    } else if (state.mediaPush.type === 'video') {
+      const ytId = extractYoutubeId(state.mediaPush.data);
+      if (ytId) {
+        mediaEl.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=0" allowfullscreen style="width:100%;height:250px;border:none"></iframe>`;
+      } else {
+        mediaEl.innerHTML = `<video src="${escHtml(state.mediaPush.data)}" controls style="width:100%;max-height:250px"></video>`;
+      }
     }
   } else {
     mediaEl.classList.add('empty');
@@ -1248,7 +1361,7 @@ function renderCharMini(char) {
   const skillD6 = parseInt(char.skill?.d6) || 0;
   el.innerHTML = `
     <div class="char-mini-name">${char.name}</div>
-    ${char.background ? `<div class="char-mini-bg">${char.background.slice(0,80)}</div>` : ''}
+    ${char.background ? `<div class="char-mini-bg">${char.background}</div>` : ''}
     <div class="char-stats">
       <div class="stat-box">
         <div class="stat-label">Força</div>
@@ -1385,6 +1498,156 @@ function rollBackground() {
   }
 }
 
+
+// ══════════════════════════════════════════════════════════════
+// NPC SYSTEM
+// ══════════════════════════════════════════════════════════════
+const NPC_TEMPLATES = [
+  {
+    id:'t1', name:'Sentinela Limiar', faction:'Limiares',
+    forca:18, behavior:'Hostile',
+    notes:'Fardamento táctico escuro. Entra em combate se o grupo tentar passar. Recua se um aliado cair. Carrega supressores de amostra biológica no colete.'
+  },
+  {
+    id:'t2', name:'Chefe Limiar', faction:'Limiares',
+    forca:24, behavior:'Hostile',
+    notes:'Negocia antes de atacar. Tem documentos classificados sobre o incidente de 2032. Acredita genuinamente que está a proteger a humanidade.'
+  },
+  {
+    id:'t3', name:'Técnico Limiar', faction:'Limiares',
+    forca:14, behavior:'Fearful',
+    notes:'Não combate. Foge se ameaçado. Sabe onde está o arquivo na plataforma e pode ser convencido a colaborar.'
+  },
+  {
+    id:'t4', name:'Agente Vector', faction:'Vectores',
+    forca:16, behavior:'Friendly',
+    notes:'Nunca ataca primeiro. Oferece contacto intenso com o Musgo como "presente". Tem Musgo 3 — os olhos têm bioluminescência faint em ambientes escuros.'
+  },
+  {
+    id:'t5', name:'Vector Recrutador', faction:'Vectores',
+    forca:14, behavior:'Curious',
+    notes:'Faz perguntas sobre as experiências de Musgo do grupo. Regista tudo num caderno em código. Parece saber coisas sobre os personagens antes de os conhecer.'
+  },
+  {
+    id:'t6', name:'Proto-Baelfungious', faction:'Metro / Floresta',
+    forca:10, behavior:'Curious',
+    notes:'Pequeno, coberto de algo entre pelo e fungo. Ignora personagens com Musgo < 3. Aproxima-se de quem tem Musgo ≥ 3 com curiosidade. Carrega objectos sem razão aparente.'
+  },
+  {
+    id:'t7', name:'Guardião da Caverna (pequeno)', faction:'Caverna',
+    forca:15, behavior:'Neutral',
+    notes:'Foge se o personagem tiver Musgo ≥ 3. Ataca se provocado. Defende o espaço mas não tem território fixo — patrulha.'
+  },
+  {
+    id:'t8', name:'Guardião da Caverna (grande)', faction:'Caverna',
+    forca:22, behavior:'Hostile',
+    notes:'Não foge. Defende território específico. Para completamente se o grupo parar de se mover por 2 turnos consecutivos.'
+  },
+  {
+    id:'t9', name:'Investigador da Coligação', faction:'Coligação',
+    forca:13, behavior:'Neutral',
+    notes:'Burocrático, assustado, quer que alguém lhe diga o que fazer. Tem credenciais de acesso a algumas áreas restritas. Partilha informação em troca de protecção.'
+  },
+  {
+    id:'t10', name:'Cientista Dissidente', faction:'Coligação / Vectores',
+    forca:12, behavior:'Friendly',
+    notes:'Trabalha oficialmente para a Coligação mas partilha dados com os Vectores. Tem teorias sobre a origem do Musgo que os seus superiores consideram perigosas. Musgo 2.'
+  },
+];
+
+let localNPCs = []; // [{...npcData, uid}]
+
+function showNPCModal(mode) {
+  document.getElementById('modal-npc').classList.remove('hidden');
+  document.getElementById('npc-modal-title').textContent = mode === 'template' ? 'Templates de NPC' : 'Criar NPC';
+
+  // Populate template grid
+  const grid = document.getElementById('npc-template-grid');
+  grid.innerHTML = '';
+  NPC_TEMPLATES.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'npc-template-btn';
+    btn.innerHTML = `<div class="npc-template-name">${t.name}</div>
+      <div class="npc-template-meta">${t.faction} · F:${t.forca} · ${t.behavior}</div>`;
+    btn.onclick = () => fillNPCFromTemplate(t);
+    grid.appendChild(btn);
+  });
+
+  // Clear custom fields
+  if (mode !== 'template') {
+    document.getElementById('npc-name').value    = '';
+    document.getElementById('npc-faction').value = '';
+    document.getElementById('npc-forca').value   = '15';
+    document.getElementById('npc-behavior').value= 'Neutral';
+    document.getElementById('npc-notes').value   = '';
+  }
+}
+
+function fillNPCFromTemplate(t) {
+  document.getElementById('npc-name').value    = t.name;
+  document.getElementById('npc-faction').value = t.faction;
+  document.getElementById('npc-forca').value   = t.forca;
+  document.getElementById('npc-behavior').value= t.behavior;
+  document.getElementById('npc-notes').value   = t.notes;
+  document.getElementById('npc-modal-title').textContent = 'Confirmar NPC';
+}
+
+function hideNPCModal() {
+  document.getElementById('modal-npc').classList.add('hidden');
+}
+
+function rollNPCForca() {
+  const r = Array.from({length:2}, () => Math.floor(Math.random()*6)+1);
+  document.getElementById('npc-forca').value = r.reduce((a,b)=>a+b,0) + 6;
+}
+
+function spawnNPC() {
+  const name     = document.getElementById('npc-name').value.trim();
+  const faction  = document.getElementById('npc-faction').value.trim();
+  const forca    = parseInt(document.getElementById('npc-forca').value) || 15;
+  const behavior = document.getElementById('npc-behavior').value;
+  const notes    = document.getElementById('npc-notes').value.trim();
+  if (!name) { showBanner('O NPC precisa de um nome', 'danger'); return; }
+  send({ type: 'SPAWN_NPC', npc: { name, faction, forca, behavior, notes } });
+  hideNPCModal();
+  showBanner('🎭 ' + name + ' entrou em cena', 'confirm');
+}
+
+function removeNPC(uid) {
+  send({ type: 'REMOVE_NPC', uid });
+}
+
+function renderNPCList(npcs) {
+  const el = document.getElementById('gm-npc-list');
+  if (!el) return;
+  el.innerHTML = '';
+  if (!npcs || !npcs.length) {
+    el.innerHTML = '<div style="color:var(--text-secondary);font-size:var(--text-xs);font-style:italic;padding:var(--sp-2)">Sem NPCs em cena.</div>';
+    return;
+  }
+  npcs.forEach(n => {
+    const card = document.createElement('div');
+    const behaviorClass = { Hostile:'hostile', Friendly:'friendly', Fearful:'fearful', Curious:'curious' }[n.behavior] || '';
+    card.className = 'npc-card ' + behaviorClass;
+    const bLabel = { Hostile:'⚔ Hostil', Friendly:'🤝 Amigável', Fearful:'😨 Com medo', Curious:'👁 Curioso', Neutral:'● Neutro' }[n.behavior] || n.behavior;
+    card.innerHTML = `
+      <div>
+        <div class="npc-name">${escHtml(n.name)}</div>
+        <div class="npc-meta">${escHtml(n.faction||'')} · F:${n.forca} · ${bLabel}</div>
+        ${n.notes ? `<div class="npc-notes">${escHtml(n.notes)}</div>` : ''}
+      </div>
+      <button class="bg-btn bg-btn-danger" style="padding:2px 6px;font-size:0.65rem;flex-shrink:0" onclick="removeNPC('${n.uid}')">✕</button>
+    `;
+    el.appendChild(card);
+  });
+}
+
+function killPlayer(seat) {
+  if (!confirm('Confirmar: abater jogador no seat ' + seat + '? Isto regista o evento no log da história.')) return;
+  send({ type: 'KILL_PLAYER', seat });
+  showBanner('☠ Evento registado no log', 'danger');
+}
+
 function toggleLockTable() {
   const isLocked = gameState?.locked;
   send({ type: isLocked ? 'UNLOCK_TABLE' : 'LOCK_TABLE' });
@@ -1408,10 +1671,11 @@ function clearScene() {
 
 // ── MEDIA ─────────────────────────────────────────────────────
 function pushMedia() {
+  const mediaType = document.getElementById('gm-media-type').value;
   const data = document.getElementById('gm-media-url').value.trim();
   if (!data) { showBanner('Introduz um URL', 'danger'); return; }
-  send({ type: 'GM_PUSH_MEDIA', mediaType: 'image', data });
-  showBanner('📤 Imagem enviada para jogadores', 'confirm');
+  send({ type: 'GM_PUSH_MEDIA', mediaType, data });
+  showBanner('📤 Media enviada para jogadores', 'confirm');
 }
 function clearMedia() {
   document.getElementById('gm-media-url').value = '';
@@ -1613,6 +1877,11 @@ function hideRules() { document.getElementById('modal-rules').classList.add('hid
 // ══════════════════════════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════════════════════════
+function extractYoutubeId(url) {
+  const m = url.match(/(?:youtu\.be\/|[?&]v=)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
 function escHtml(s) {
   if (!s) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -1636,7 +1905,7 @@ document.addEventListener('keydown', e => {
 });
 
 // Close modals on overlay click
-['modal-char','modal-rules'].forEach(id => {
+['modal-char','modal-rules','modal-npc'].forEach(id => {
   document.getElementById(id).addEventListener('click', e => {
     if (e.target === e.currentTarget)
       e.currentTarget.classList.add('hidden');
